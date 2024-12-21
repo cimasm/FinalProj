@@ -96,11 +96,10 @@ int main(void) {
 
 	// Available textures
 	const char* textures[] = {
-		"../FinalProj/building/modern_facade.jpg"
-		"../FinalProj/building/facade0.jpg",
-		"../FinalProj/building/facade1.jpg",
-		"../FinalProj/building/facade3.jpg",
-		"../FinalProj/building/facade4.jpg"
+		"../FinalProj/building/modern0.jpg",
+		"../FinalProj/building/modern1.jpg",
+		"../FinalProj/building/modern2.jpg",
+		"../FinalProj/building/modern3.jpg"
 	};
 
 	float constant = 75.0f;
@@ -119,7 +118,7 @@ int main(void) {
 			if(j > gridSizeZ / 2 - 1) { posZ += constant; }
 
 			// Select random building texture
-			int textureIndex = rand() % 5;
+			int textureIndex = rand() % 4;
 
 			Building b;
 			b.initialize(glm::vec3(posX, 0.0f, posZ), glm::vec3(width, height, depth), textures[textureIndex]); // Keep Y position at 0
