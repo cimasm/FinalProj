@@ -79,14 +79,6 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// Get a handle for light properties and shadow map
-	lightPositionID = glGetUniformLocation(programID, "lightPosition");
-	lightIntensityID = glGetUniformLocation(programID, "lightIntensity");
-	shadowMapID = glGetUniformLocation(programID, "shadowMap");
-	lightSpaceMatrixID = glGetUniformLocation(programID, "lightSpaceMatrix");
-    // -----------------------------------------------------------------------------------------------------------------
-
 	// Create and compile our GLSL program from the shaders
 	programID = LoadShadersFromFile("../FinalProj/box.vert", "../FinalProj/box.frag");
 	if (programID == 0)

@@ -6,7 +6,6 @@
 struct Building {
     GLuint vertexArrayID, vertexBufferID, indexBufferID, colorBufferID, uvBufferID, textureID;
     GLuint mvpMatrixID, textureSamplerID, programID;
-	GLuint lightPositionID, lightIntensityID, shadowMapID, lightSpaceMatrixID;
 
     glm::vec3 position;
     glm::vec3 scale;
