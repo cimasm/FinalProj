@@ -9,6 +9,7 @@
 #include <iostream>
 #include <skybox/skybox.h>
 #include <building/building.h>
+#include <render/shader.h>
 #include <road/road.h>
 #include <windmill/blades.h>
 #include <windmill/windmill.h>
@@ -33,8 +34,11 @@ double lastX = 512, lastY = 384;  // Starting mouse position (center of the scre
 float yaw = -90.0f, pitch = 0.0f; // Initialize orientation angles
 bool firstMouse = true;           // To avoid sudden jumps at the start
 
-// For spire maybe if needed
-Building* spire;
+// ---------------------------------------------------------------------------------------------------------------------
+const glm::vec3 globalLightPosition(0.0f, 100.0f, 0.0f); // Position above the buildings
+glm::vec3 globalLightIntensity(1.0f, 1.0f, 1.0f);  // Bright white light
+glm::vec3 cameraPosition = eye_center;             // Update camera position dynamically
+
 
 int main(void) {
     // Initialise GLFW
@@ -199,16 +203,27 @@ int main(void) {
     	glDepthMask(GL_TRUE);  // Re-enable depth writes
 
     	// render road
-    	road.render(vp);
+    	//road.render(vp);
 
     	// render buildings
-    	for(Building b : buildings) {
+    	// for(Building b : buildings) {
+    	// 	b.render(vp);
+    	// }
+
+    	// -------------------------------------------------------------------------------------------------------------
+    	for (Building& b : buildings) {
+    		glUseProgram(b.programID);
+    		glUniform3fv(glGetUniformLocation(b.programID, "lightPosition"), 1, &globalLightPosition[0]);
+    		glUniform3fv(glGetUniformLocation(b.programID, "lightIntensity"), 1, &globalLightIntensity[0]);
+    		glUniform3fv(glGetUniformLocation(b.programID, "viewPosition"), 1, &eye_center[0]);
+
     		b.render(vp);
     	}
 
+
     	// render spire and blades
-    	windmill.render(vp);
-    	blades.render(vp);
+    	//windmill.render(vp);
+    	//blades.render(vp);
 
 
 

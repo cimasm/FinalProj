@@ -37,10 +37,7 @@ GLuint colorBufferID;
 GLuint uvBufferID;
 GLuint textureID;
 
-// Shader variable IDs
-GLuint mvpMatrixID;
-GLuint textureSamplerID;
-GLuint programID;
+GLuint normalBufferID;
 
 
 void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *texture_file_path) {
@@ -74,13 +71,19 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STATIC_DRAW);
 
+	// Create a vertex buffer object to store the vertex normals
+	glGenBuffers(1, &normalBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normal_buffer_data), normal_buffer_data, GL_STATIC_DRAW);
+
+
 	// Create an index buffer object to store the index data that defines triangle faces
 	glGenBuffers(1, &indexBufferID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
 	// Create and compile our GLSL program from the shaders
-	programID = LoadShadersFromFile("../FinalProj/box.vert", "../FinalProj/box.frag");
+	programID = LoadShadersFromFile("../FinalProj/s2.vert", "../FinalProj/s2.frag");
 	if (programID == 0)
 	{
 		std::cerr << "Failed to load shaders." << std::endl;
@@ -99,13 +102,20 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 void Building::render(glm::mat4 cameraMatrix) {
 	glUseProgram(programID);
 
+	// Vertices
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	// Colour
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// Normals
+	glEnableVertexAttribArray(3); // Attribute location 3 for normals
+	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 
@@ -114,9 +124,26 @@ void Building::render(glm::mat4 cameraMatrix) {
 	modelMatrix = translate(modelMatrix, position);
 	modelMatrix = glm::scale(modelMatrix, scale);
 
+	GLuint modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
+	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+
+	///////
+	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+
+
 	// Set model-view-projection matrix
 	glm::mat4 mvp = cameraMatrix * modelMatrix;
 	glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
+
+	// Set the normal matrix
+	GLuint normalMatrixID = glGetUniformLocation(programID, "normalMatrix");
+	glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, &normalMatrix[0][0]);
+
+	//////
+
+	// // Set model-view-projection matrix
+	// glm::mat4 mvp = cameraMatrix * modelMatrix;
+	// glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
 
 	// Enable UV buffer and texture sampler
 	glEnableVertexAttribArray(2);
