@@ -9,7 +9,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/building/building.cpp" "CMakeFiles/main.dir/FinalProj/building/building.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/building/building.cpp.obj.d"
-  "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/light/light.cpp" "CMakeFiles/main.dir/FinalProj/light/light.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/light/light.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/main.cpp" "CMakeFiles/main.dir/FinalProj/main.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/main.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/render/shader.cpp" "CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/road/road.cpp" "CMakeFiles/main.dir/FinalProj/road/road.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/road/road.cpp.obj.d"

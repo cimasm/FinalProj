@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/lab2_building.dir/FinalProj/building/building.cpp.obj"
   "CMakeFiles/lab2_building.dir/FinalProj/building/building.cpp.obj.d"
-  "CMakeFiles/lab2_building.dir/FinalProj/light/light.cpp.obj"
-  "CMakeFiles/lab2_building.dir/FinalProj/light/light.cpp.obj.d"
   "CMakeFiles/lab2_building.dir/FinalProj/render/shader.cpp.obj"
   "CMakeFiles/lab2_building.dir/FinalProj/render/shader.cpp.obj.d"
   "CMakeFiles/lab2_building.dir/FinalProj/road/road.cpp.obj"

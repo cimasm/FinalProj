@@ -25,7 +25,6 @@ add_executable(lab2_building
 		FinalProj/road/road.cpp
 		FinalProj/windmill/windmill.cpp
 		FinalProj/windmill/blades.cpp
-		FinalProj/light/light.cpp
 )
 
 target_link_libraries(lab2_building
@@ -48,8 +47,6 @@ add_executable(main
 		FinalProj/windmill/windmill.cpp
 		FinalProj/windmill/blades.h
 		FinalProj/windmill/blades.cpp
-		FinalProj/light/light.h
-		FinalProj/light/light.cpp
 )
 
 target_link_libraries(main

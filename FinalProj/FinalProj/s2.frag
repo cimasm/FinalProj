@@ -32,8 +32,6 @@ void main() {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightIntensity;
 
-
-
     // Combine results
     vec3 result = (ambient + diffuse + specular) * texture(textureSampler, UV).rgb;
     color = result;

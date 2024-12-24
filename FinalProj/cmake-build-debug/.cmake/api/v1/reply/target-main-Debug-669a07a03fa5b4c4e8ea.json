@@ -29,13 +29,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 38,
+				"line" : 37,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 55,
+				"line" : 52,
 				"parent" : 0
 			},
 			{
@@ -95,8 +95,7 @@
 				5,
 				7,
 				9,
-				11,
-				13
+				11
 			]
 		}
 	],
@@ -175,8 +174,7 @@
 				5,
 				7,
 				9,
-				11,
-				13
+				11
 			]
 		},
 		{
@@ -187,8 +185,7 @@
 				4,
 				6,
 				8,
-				10,
-				12
+				10
 			]
 		}
 	],
@@ -259,17 +256,6 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "FinalProj/windmill/blades.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "FinalProj/light/light.h",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "FinalProj/light/light.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

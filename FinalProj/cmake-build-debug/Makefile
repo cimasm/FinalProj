@@ -194,33 +194,6 @@ FinalProj/building/building.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/building/building.cpp.s
 .PHONY : FinalProj/building/building.cpp.s
 
-FinalProj/light/light.obj: FinalProj/light/light.cpp.obj
-.PHONY : FinalProj/light/light.obj
-
-# target to build an object file
-FinalProj/light/light.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/light/light.cpp.obj
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/light/light.cpp.obj
-.PHONY : FinalProj/light/light.cpp.obj
-
-FinalProj/light/light.i: FinalProj/light/light.cpp.i
-.PHONY : FinalProj/light/light.i
-
-# target to preprocess a source file
-FinalProj/light/light.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/light/light.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/light/light.cpp.i
-.PHONY : FinalProj/light/light.cpp.i
-
-FinalProj/light/light.s: FinalProj/light/light.cpp.s
-.PHONY : FinalProj/light/light.s
-
-# target to generate assembly for a file
-FinalProj/light/light.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/light/light.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/light/light.cpp.s
-.PHONY : FinalProj/light/light.cpp.s
-
 FinalProj/main.obj: FinalProj/main.cpp.obj
 .PHONY : FinalProj/main.obj
 
@@ -392,9 +365,6 @@ help:
 	@echo ... FinalProj/building/building.obj
 	@echo ... FinalProj/building/building.i
 	@echo ... FinalProj/building/building.s
-	@echo ... FinalProj/light/light.obj
-	@echo ... FinalProj/light/light.i
-	@echo ... FinalProj/light/light.s
 	@echo ... FinalProj/main.obj
 	@echo ... FinalProj/main.i
 	@echo ... FinalProj/main.s
