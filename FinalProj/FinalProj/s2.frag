@@ -10,15 +10,9 @@ uniform vec3 lightPosition;
 uniform vec3 lightIntensity;
 uniform vec3 viewPosition;
 
-out vec4 color;
+out vec3 color;
 
 void main() {
-    //vec3 normal = normalize(fragNormal);
-    //vec3 lightDir = normalize(lightPosition - fragPosition);
-    //float diff = max(dot(normal, lightDir), 0.0); // Diffuse only
-    //color = vec4(fragPosition * 0.01, 1.0); // Scale to fit within [0, 1]
-
-
     // Normalize input vectors
     vec3 normal = normalize(fragNormal);
     vec3 lightDir = normalize(lightPosition - fragPosition);
@@ -42,5 +36,5 @@ void main() {
 
     // Combine results
     vec3 result = (ambient + diffuse + specular) * texture(textureSampler, UV).rgb;
-    color = vec4(result, 1.0);
+    color = result;
 }

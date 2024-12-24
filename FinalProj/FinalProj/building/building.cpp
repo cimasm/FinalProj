@@ -29,17 +29,6 @@ static GLuint LoadTextureTileBox(const char *texture_file_path) {
     return texture;
 }
 
-// OpenGL buffers
-GLuint vertexArrayID;
-GLuint vertexBufferID;
-GLuint indexBufferID;
-GLuint colorBufferID;
-GLuint uvBufferID;
-GLuint textureID;
-
-GLuint normalBufferID;
-
-
 void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *texture_file_path) {
 
 	// Set the color values to 1
@@ -99,7 +88,11 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	textureSamplerID = glGetUniformLocation(programID,"textureSampler");
 }
 
-void Building::render(glm::mat4 cameraMatrix) {
+void Building::render_first_pass(glm::mat4 cameraMatrix) {
+
+}
+
+void Building::render_second_pass(glm::mat4 cameraMatrix) {
 	glUseProgram(programID);
 
 	// Vertices

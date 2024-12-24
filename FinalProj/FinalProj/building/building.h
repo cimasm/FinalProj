@@ -6,6 +6,7 @@
 struct Building {
     GLuint vertexArrayID, vertexBufferID, indexBufferID, colorBufferID, uvBufferID, textureID;
     GLuint mvpMatrixID, textureSamplerID, programID;
+	GLuint normalBufferID;
 
     glm::vec3 position;
     glm::vec3 scale;
@@ -179,7 +180,8 @@ struct Building {
 	};
 
     void initialize(glm::vec3 position, glm::vec3 scale, const char *texture_file_path);
-    void render(glm::mat4 cameraMatrix);
+	void render_first_pass(glm::mat4 cameraMatrix);
+    void render_second_pass(glm::mat4 cameraMatrix);
     void cleanup();
 };
 

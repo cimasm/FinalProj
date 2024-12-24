@@ -35,9 +35,17 @@ float yaw = -90.0f, pitch = 0.0f; // Initialize orientation angles
 bool firstMouse = true;           // To avoid sudden jumps at the start
 
 // ---------------------------------------------------------------------------------------------------------------------
+
+// Lighting setup
 const glm::vec3 globalLightPosition(0.0f, 100.0f, 0.0f); // Position above the buildings
 glm::vec3 globalLightIntensity(1.0f, 1.0f, 1.0f);  // Bright white light
 glm::vec3 cameraPosition = eye_center;             // Update camera position dynamically
+
+// Shadow mapping
+static glm::vec3 lightUp(0, 0, 1);
+static int shadowMapWidth = 0;
+static int shadowMapHeight = 0;
+
 
 
 int main(void) {
@@ -205,19 +213,13 @@ int main(void) {
     	// render road
     	//road.render(vp);
 
-    	// render buildings
-    	// for(Building b : buildings) {
-    	// 	b.render(vp);
-    	// }
-
-    	// -------------------------------------------------------------------------------------------------------------
     	for (Building& b : buildings) {
     		glUseProgram(b.programID);
     		glUniform3fv(glGetUniformLocation(b.programID, "lightPosition"), 1, &globalLightPosition[0]);
     		glUniform3fv(glGetUniformLocation(b.programID, "lightIntensity"), 1, &globalLightIntensity[0]);
     		glUniform3fv(glGetUniformLocation(b.programID, "viewPosition"), 1, &eye_center[0]);
 
-    		b.render(vp);
+    		b.render_second_pass(vp);
     	}
 
 
