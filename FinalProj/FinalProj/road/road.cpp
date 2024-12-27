@@ -65,7 +65,8 @@ void Road::initialize(glm::vec3 position, glm::vec3 scale, const char *texture_f
 
 	// Scale UV coordinates
 	for (int i = 0; i < 4; ++i) {
-		uv_buffer_data[i * 2 + 1] *= 5; // Scale V-coordinates
+		uv_buffer_data[i * 2 + 1] *= 10; // Tile 10 times vertically
+		uv_buffer_data[i * 2] *= 10;     // Tile 10 times horizontally
 	}
 
 	glGenBuffers(1, &uvBufferID);

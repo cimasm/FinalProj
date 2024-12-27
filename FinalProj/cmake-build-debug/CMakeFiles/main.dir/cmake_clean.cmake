@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/FinalProj/building/building.cpp.obj.d"
   "CMakeFiles/main.dir/FinalProj/main.cpp.obj"
   "CMakeFiles/main.dir/FinalProj/main.cpp.obj.d"
+  "CMakeFiles/main.dir/FinalProj/model/model.cpp.obj"
+  "CMakeFiles/main.dir/FinalProj/model/model.cpp.obj.d"
   "CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj"
   "CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj.d"
   "CMakeFiles/main.dir/FinalProj/road/road.cpp.obj"

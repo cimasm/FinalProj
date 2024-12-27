@@ -31,9 +31,9 @@ void Windmill::generateGeometry(int slices, float height, float radius) {
 
         // Colors (set to white for simplicity)
         for (int j = 0; j < 2; ++j) {
-            color_buffer_data.push_back(1.0f);
-            color_buffer_data.push_back(1.0f);
-            color_buffer_data.push_back(1.0f);
+            color_buffer_data.push_back(0.8f);
+            color_buffer_data.push_back(0.8f);
+            color_buffer_data.push_back(0.8f);
         }
     }
 
@@ -79,14 +79,20 @@ void Windmill::initialize(glm::vec3 position, glm::vec3 scale) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), index_buffer_data.data(), GL_STATIC_DRAW);
 
-    programID = LoadShadersFromFile("../FinalProj/box.vert", "../FinalProj/box.frag");
+    programID = LoadShadersFromFile("../FinalProj/windmill/windmill.vert", "../FinalProj/windmill/windmill.frag");
     mvpMatrixID = glGetUniformLocation(programID, "MVP");
 }
 
 void Windmill::render(glm::mat4 cameraMatrix) {
+    // Reset texture state
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glUseProgram(programID);
 
     glBindVertexArray(vertexArrayID);
+    glUniform1i(glGetUniformLocation(programID, "hasTexture"), 0);
+
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);

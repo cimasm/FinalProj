@@ -7,6 +7,9 @@ struct Building {
     GLuint vertexArrayID, vertexBufferID, indexBufferID, colorBufferID, uvBufferID, textureID;
     GLuint mvpMatrixID, textureSamplerID, programID;
 	GLuint normalBufferID;
+	GLuint lightSpaceMatrixID;
+	GLuint globalLightPositionID;
+	GLuint globalLightIntensityID;
 
     glm::vec3 position;
     glm::vec3 scale;
@@ -180,8 +183,8 @@ struct Building {
 	};
 
     void initialize(glm::vec3 position, glm::vec3 scale, const char *texture_file_path);
-	void render_first_pass(glm::mat4 cameraMatrix);
-    void render_second_pass(glm::mat4 cameraMatrix);
+	void render_first_pass(glm::mat4 lightSpaceMatrix, GLuint depthMapShaders, glm::vec3 globalLightPosition, glm::vec3 globalLightIntensity);
+    void render_second_pass(glm::mat4 cameraMatrix, GLuint shadowRenderShaders);
     void cleanup();
 };
 

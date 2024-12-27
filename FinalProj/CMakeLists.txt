@@ -47,6 +47,8 @@ add_executable(main
 		FinalProj/windmill/windmill.cpp
 		FinalProj/windmill/blades.h
 		FinalProj/windmill/blades.cpp
+		FinalProj/model/model.h
+		FinalProj/model/model.cpp
 )
 
 target_link_libraries(main

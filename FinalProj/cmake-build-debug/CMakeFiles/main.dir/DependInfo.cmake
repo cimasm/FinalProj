@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/building/building.cpp" "CMakeFiles/main.dir/FinalProj/building/building.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/building/building.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/main.cpp" "CMakeFiles/main.dir/FinalProj/main.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/main.cpp.obj.d"
+  "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/model/model.cpp" "CMakeFiles/main.dir/FinalProj/model/model.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/model/model.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/render/shader.cpp" "CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/road/road.cpp" "CMakeFiles/main.dir/FinalProj/road/road.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/road/road.cpp.obj.d"
   "C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/FinalProj/skybox/skybox.cpp" "CMakeFiles/main.dir/FinalProj/skybox/skybox.cpp.obj" "gcc" "CMakeFiles/main.dir/FinalProj/skybox/skybox.cpp.obj.d"

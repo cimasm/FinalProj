@@ -88,12 +88,52 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	textureSamplerID = glGetUniformLocation(programID,"textureSampler");
 }
 
-void Building::render_first_pass(glm::mat4 cameraMatrix) {
+void Building::render_first_pass(glm::mat4 lightSpaceMatrix, GLuint depthMapShaders, glm::vec3 globalLightPosition, glm::vec3 globalLightIntensity) {
+	programID = depthMapShaders;
+	glUseProgram(depthMapShaders);
 
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+
+	// Model transform
+	glm::mat4 modelMatrix = glm::mat4();
+	modelMatrix = translate(modelMatrix, position);
+	modelMatrix = glm::scale(modelMatrix, scale);
+
+	lightSpaceMatrix = lightSpaceMatrix * modelMatrix;
+	lightSpaceMatrixID = glGetUniformLocation(depthMapShaders, "lightSpaceMatrix");
+	glUniformMatrix4fv(lightSpaceMatrixID, 1, GL_FALSE, &lightSpaceMatrix[0][0]);
+
+	// Set light data
+	glUniform3fv(globalLightPositionID, 1, &globalLightPosition[0]); // TODO: check all these inputs!!
+	glUniform3fv(globalLightIntensityID, 1, &globalLightIntensity[0]);
+
+	// Draw the box
+	glDrawElements(
+		GL_TRIANGLES,      // mode
+		sizeof(index_buffer_data) / sizeof(GLuint),  // number of indices
+		GL_UNSIGNED_INT,   // type
+		(void*)0           // element array buffer offset
+	);
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 }
 
-void Building::render_second_pass(glm::mat4 cameraMatrix) {
-	glUseProgram(programID);
+void Building::render_second_pass(glm::mat4 cameraMatrix, GLuint shadowRenderShaders) {
+	glUseProgram(shadowRenderShaders);
 
 	// Vertices
 	glEnableVertexAttribArray(0);

@@ -218,6 +218,30 @@ FinalProj/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/main.cpp.s
 .PHONY : FinalProj/main.cpp.s
 
+FinalProj/model/model.obj: FinalProj/model/model.cpp.obj
+.PHONY : FinalProj/model/model.obj
+
+# target to build an object file
+FinalProj/model/model.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/model/model.cpp.obj
+.PHONY : FinalProj/model/model.cpp.obj
+
+FinalProj/model/model.i: FinalProj/model/model.cpp.i
+.PHONY : FinalProj/model/model.i
+
+# target to preprocess a source file
+FinalProj/model/model.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/model/model.cpp.i
+.PHONY : FinalProj/model/model.cpp.i
+
+FinalProj/model/model.s: FinalProj/model/model.cpp.s
+.PHONY : FinalProj/model/model.s
+
+# target to generate assembly for a file
+FinalProj/model/model.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/model/model.cpp.s
+.PHONY : FinalProj/model/model.cpp.s
+
 FinalProj/render/shader.obj: FinalProj/render/shader.cpp.obj
 .PHONY : FinalProj/render/shader.obj
 
@@ -368,6 +392,9 @@ help:
 	@echo ... FinalProj/main.obj
 	@echo ... FinalProj/main.i
 	@echo ... FinalProj/main.s
+	@echo ... FinalProj/model/model.obj
+	@echo ... FinalProj/model/model.i
+	@echo ... FinalProj/model/model.s
 	@echo ... FinalProj/render/shader.obj
 	@echo ... FinalProj/render/shader.i
 	@echo ... FinalProj/render/shader.s

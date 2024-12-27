@@ -4,15 +4,41 @@ in vec3 fragColor;
 in vec2 UV;
 in vec3 fragNormal;
 in vec3 fragPosition;
+in vec4 fragPosLightSpace;
 
 uniform sampler2D textureSampler;
 uniform vec3 lightPosition;
 uniform vec3 lightIntensity;
 uniform vec3 viewPosition;
+uniform sampler2D depthMap;
 
 out vec3 color;
 
+
+float ShadowCalculation(vec4 fragPosLightSpace) {
+    // Transform fragment position into light space
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5; // Transform to [0,1] range
+
+    // Check if projCoords are within the depth texture bounds
+    if (fragPosition.y > lightPosition.y)
+        return 1.0; // No shadow if outside light's view frustum     // this is why everything above lights y pos is bright
+
+    // Get closest depth from light's perspective
+    float closestDepth = texture(depthMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    // Shadow calculation with small bias to prevent acne
+    float bias = 0.67; // 1e-3;
+    return (currentDepth > closestDepth + bias) ? 0.2 : 1.0;
+}
+
+
+
 void main() {
+    // Calculate shadow factor
+    float shadow = ShadowCalculation(fragPosLightSpace);
+
     // Normalize input vectors
     vec3 normal = normalize(fragNormal);
     vec3 lightDir = normalize(lightPosition - fragPosition);
@@ -34,5 +60,5 @@ void main() {
 
     // Combine results
     vec3 result = (ambient + diffuse + specular) * texture(textureSampler, UV).rgb;
-    color = result;
+    color = result; // * shadow;
 }

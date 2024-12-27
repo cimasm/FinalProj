@@ -35,9 +35,9 @@ void Blades::generateGeometry() {
     };
 
     for (int i = 0; i < 12; ++i) {
-        color_buffer_data.push_back(1.0f); // R
-        color_buffer_data.push_back(1.0f); // G
-        color_buffer_data.push_back(1.0f); // B
+        color_buffer_data.push_back(0.8f); // R
+        color_buffer_data.push_back(0.8f); // G
+        color_buffer_data.push_back(0.8f); // B
     }
 }
 
@@ -62,7 +62,7 @@ void Blades::initialize(glm::vec3 position, glm::vec3 scale) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), index_buffer_data.data(), GL_STATIC_DRAW);
 
-    programID = LoadShadersFromFile("../FinalProj/box.vert", "../FinalProj/box.frag");
+    programID = LoadShadersFromFile("../FinalProj/windmill/windmill.vert", "../FinalProj/windmill/windmill.frag");
     mvpMatrixID = glGetUniformLocation(programID, "MVP");
 }
 
