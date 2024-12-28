@@ -6,6 +6,7 @@
 #include <iostream>
 #define _USE_MATH_DEFINES
 
+
 static GLuint LoadTextureSkybox(const char *texture_file_path) {
     GLuint textureID;
     glGenTextures(1, &textureID);
@@ -70,12 +71,11 @@ void Skybox::initialize() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
     // Create and compile GLSL program from the shaders
-    programIDsb = LoadShadersFromFile("../FinalProj/skybox/skybox.vert", "../FinalProj/skybox/skybox.frag");
+    programIDsb = LoadShadersFromFile("../FinalProj/box.vert", "../FinalProj/box.frag");
     if (programIDsb == 0)
     {
         std::cerr << "Failed to load shaders." << std::endl;
     }
-
 
     // Get a handle for our "MVP" uniform
     mvpMatrixIDsb = glGetUniformLocation(programIDsb, "MVP");
@@ -99,7 +99,6 @@ void Skybox::render(glm::mat4 cameraMatrix) {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferIDsb);
-
 
     // Set model-view-projection matrix
     glUniformMatrix4fv(mvpMatrixIDsb, 1, GL_FALSE, &cameraMatrix[0][0]);

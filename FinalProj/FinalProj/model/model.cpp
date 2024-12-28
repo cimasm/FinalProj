@@ -4,25 +4,21 @@
 #include <render/shader.h>
 #include "glad/gl.h"
 #include "model.h"
-
 #define TINYGLTF_IMPLEMENTATION
 #include "tiny_gltf.h"
 
-Model::Model() {
-    // Initialize the model matrix to identity
-    modelMatrix = glm::mat4(1.0f);
 
+Model::Model() {
+    modelMatrix = glm::mat4(1.0f);
     programID = LoadShadersFromFile("../FinalProj/model/model.vert", "../FinalProj/model/model.frag");
-    if (programID == 0)
-    {
+    if (programID == 0) {
         std::cerr << "Failed to load model shaders." << std::endl;
     }
-
     checkShaderCompilation();
 }
 
 Model::~Model() {
-    // Clean up OpenGL buffers when the model object is destroyed
+    // Clean up buffers when model is destroyed
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
@@ -32,25 +28,21 @@ bool Model::loadModel(const std::string& path) {
     std::string err;
     std::string warn;
 
-    // Load the glTF file
+    // Load glTF file
     bool ret = loader.LoadASCIIFromFile(&model, &err, &warn, path);
 
-    // Handle any warnings or errors
     if (!warn.empty()) {
         std::cout << "Warning: " << warn << std::endl;
     }
-
     if (!err.empty()) {
         std::cout << "Error: " << err << std::endl;
     }
-
     if (!ret) {
         std::cout << "Failed to load glTF file: " << path << std::endl;
         return false;
     }
 
-    // Process the default scene
-    // Most glTF files have just one mesh, but we'll handle multiple meshes
+    // Process scene
     const tinygltf::Scene& scene = model.scenes[model.defaultScene];
     for (size_t i = 0; i < scene.nodes.size(); i++) {
         const tinygltf::Node& node = model.nodes[scene.nodes[i]];
@@ -58,15 +50,13 @@ bool Model::loadModel(const std::string& path) {
             processMesh(model, model.meshes[node.mesh]);
         }
     }
-
-    // Set up the OpenGL buffers with our processed data
     setupMesh();
     return true;
 }
 
 bool Model::loadTexture(const tinygltf::Model& model, int textureIndex) {
-    const tinygltf::Texture& tex = model.textures[textureIndex];
-    const tinygltf::Image& image = model.images[tex.source];
+    const tinygltf::Texture& texture = model.textures[textureIndex];
+    const tinygltf::Image& image = model.images[texture.source];
 
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
@@ -74,9 +64,7 @@ bool Model::loadTexture(const tinygltf::Model& model, int textureIndex) {
     GLenum format = GL_RGBA;
     if (image.component == 3) format = GL_RGB;
 
-    glTexImage2D(GL_TEXTURE_2D, 0, format, image.width, image.height, 0, format,
-                 image.pixel_type, image.image.data());
-
+    glTexImage2D(GL_TEXTURE_2D, 0, format, image.width, image.height, 0, format, image.pixel_type, image.image.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -87,12 +75,8 @@ bool Model::loadTexture(const tinygltf::Model& model, int textureIndex) {
 
 
 void Model::processMesh(const tinygltf::Model& model, const tinygltf::Mesh& mesh) {
-    // std::cout << "Processing mesh with " << mesh.primitives.size() << " primitives" << std::endl;
-
-    // Process each primitive in the mesh
+    // Process each primitive in mesh
     for (const auto& primitive : mesh.primitives) {
-
-        // If the primitive has a material
         if (primitive.material >= 0) {
             const tinygltf::Material& material = model.materials[primitive.material];
 
@@ -105,13 +89,12 @@ void Model::processMesh(const tinygltf::Model& model, const tinygltf::Mesh& mesh
             }
         }
 
-
-        // Get the accessor for vertex positions
+        // Get accessor for vertex positions
         const tinygltf::Accessor& posAccessor = model.accessors[primitive.attributes.find("POSITION")->second];
         const tinygltf::BufferView& posView = model.bufferViews[posAccessor.bufferView];
         const float* positions = reinterpret_cast<const float*>(&(model.buffers[posView.buffer].data[posView.byteOffset]));
 
-        // Get the accessor for normals (if they exist)
+        // Get accessor for normals
         const float* normals = nullptr;
         if (primitive.attributes.find("NORMAL") != primitive.attributes.end()) {
             const tinygltf::Accessor& normalAccessor = model.accessors[primitive.attributes.at("NORMAL")];
@@ -119,7 +102,7 @@ void Model::processMesh(const tinygltf::Model& model, const tinygltf::Mesh& mesh
             normals = reinterpret_cast<const float*>(&(model.buffers[normalView.buffer].data[normalView.byteOffset]));
         }
 
-        // Get the accessor for texture coordinates (if they exist)
+        // Get accessor for texture coords
         const float* texCoords = nullptr;
         if (primitive.attributes.find("TEXCOORD_0") != primitive.attributes.end()) {
             const tinygltf::Accessor& texAccessor = model.accessors[primitive.attributes.at("TEXCOORD_0")];
@@ -127,38 +110,37 @@ void Model::processMesh(const tinygltf::Model& model, const tinygltf::Mesh& mesh
             texCoords = reinterpret_cast<const float*>(&(model.buffers[texView.buffer].data[texView.byteOffset]));
         }
 
-        // Process each vertex
+        // For each vertex
         for (size_t i = 0; i < posAccessor.count; i++) {
             Vertex vertex;
 
-            // Set position
+            // Positions
             vertex.position.x = positions[i * 3 + 0];
             vertex.position.y = positions[i * 3 + 1];
             vertex.position.z = positions[i * 3 + 2];
 
-            // Set normal if available
+            // Normals
             if (normals) {
                 vertex.normal.x = normals[i * 3 + 0];
                 vertex.normal.y = normals[i * 3 + 1];
                 vertex.normal.z = normals[i * 3 + 2];
             }
 
-            // Set texture coordinates if available
+            // Texture
             if (texCoords) {
                 vertex.texCoords.x = texCoords[i * 2 + 0];
                 vertex.texCoords.y = texCoords[i * 2 + 1];
             }
-
             vertices.push_back(vertex);
         }
 
-        // Process indices if they exist
+        // Process indices
         if (primitive.indices >= 0) {
             const tinygltf::Accessor& indexAccessor = model.accessors[primitive.indices];
             const tinygltf::BufferView& indexView = model.bufferViews[indexAccessor.bufferView];
             const void* indexData = &(model.buffers[indexView.buffer].data[indexView.byteOffset]);
 
-            // Handle different index formats
+            // Handle formats
             switch (indexAccessor.componentType) {
                 case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT: {
                     const uint16_t* indices = static_cast<const uint16_t*>(indexData);
@@ -180,18 +162,11 @@ void Model::processMesh(const tinygltf::Model& model, const tinygltf::Mesh& mesh
 
     for (const auto& primitive : mesh.primitives) {
         const tinygltf::Accessor& posAccessor = model.accessors[primitive.attributes.find("POSITION")->second];
-        // std::cout << "Found " << posAccessor.count << " vertices" << std::endl;
-
-        // After processing indices
-        // std::cout << "Processed " << indices.size() << " indices" << std::endl;
     }
-
 }
 
-// The setupMesh and render functions remain the same as in the previous version
-void Model::setupMesh() {
-    // std::cout << "Setting up mesh with " << vertices.size() << " vertices and " << indices.size() << " indices" << std::endl;
 
+void Model::setupMesh() {
     // Create buffers
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -202,32 +177,28 @@ void Model::setupMesh() {
 
     // Fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
-                 &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
     // Fill element buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
-                 &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-    // Set vertex attribute pointers
-    // Position attribute
+    // Position
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-    // Normal attribute
+    // Normal
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                         (void*)offsetof(Vertex, normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
-    // Texture coordinate attribute
+    // Texture
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                         (void*)offsetof(Vertex, texCoords));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
     // Unbind VAO
     glBindVertexArray(0);
 }
+
 
 void Model::render(glm::mat4 viewProjectionMatrix, glm::vec3 eye_center) {
     glUseProgram(this->programID);
@@ -240,9 +211,9 @@ void Model::render(glm::mat4 viewProjectionMatrix, glm::vec3 eye_center) {
     glUniformMatrix4fv(vpID, 1, GL_FALSE, glm::value_ptr(viewProjectionMatrix));
 
     // Set lighting parameters
-    glm::vec3 lightPos(0.0f, 100.0f, 0.0f);  // Light from above
-    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);  // White light
-    glm::vec3 objectColor(0.0f, 1.0f, 0.0f); // Green base color if no texture
+    glm::vec3 lightPos(200.0f, 600.0f, 200.0f);
+    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+    glm::vec3 objectColor(0.0f, 1.0f, 0.0f);    // If there's no texture, set to green
 
     // Set uniforms
     glUniform3fv(glGetUniformLocation(this->programID, "lightPos"), 1, glm::value_ptr(lightPos));
@@ -250,7 +221,7 @@ void Model::render(glm::mat4 viewProjectionMatrix, glm::vec3 eye_center) {
     glUniform3fv(glGetUniformLocation(this->programID, "lightColor"), 1, glm::value_ptr(lightColor));
     glUniform3fv(glGetUniformLocation(this->programID, "objectColor"), 1, glm::value_ptr(objectColor));
 
-    // Handle texturing
+    // Texture
     if (textureID > 0) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -290,12 +261,13 @@ void Model::translate(glm::vec3 movement) {
     modelMatrix = glm::translate(modelMatrix, movement);
 }
 
+
 bool Model::checkShaderCompilation() {
     GLint success;
     char infoLog[512];
-    GLuint vertexShader, fragmentShader;
+    // GLuint vertexShader, fragmentShader;
 
-    // Get the shaders from the program
+    // Get shaders
     GLsizei count;
     GLuint shaders[2];
     glGetAttachedShaders(programID, 2, &count, shaders);
@@ -325,12 +297,4 @@ bool Model::checkShaderCompilation() {
     }
 
     return true;
-}
-
-void Model::cleanup() {
-    glDeleteBuffers(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    glDeleteTextures(1, &textureID);
-    glDeleteProgram(programID);
 }

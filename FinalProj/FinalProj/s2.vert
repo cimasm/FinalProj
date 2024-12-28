@@ -21,7 +21,7 @@ void main() {
     fragColor = vertexColor;
     UV = vertexUV;
     fragPosition = vec3(modelMatrix * vec4(vertexPosition, 1.0));
-    fragNormal = mat3(normalMatrix) * vertexNormal; // Transform the normal to world space
+    fragNormal = mat3(normalMatrix) * vertexNormal;
 
     fragPosLightSpace = lightSpaceMatrix * vec4(vertexPosition, 1.0);
 }

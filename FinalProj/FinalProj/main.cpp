@@ -16,14 +16,15 @@
 #include <windmill/blades.h>
 #include <windmill/windmill.h>
 #include <model/model.h>
-
 #define _USE_MATH_DEFINES
+
 
 static GLFWwindow *window;
 int windowWidth = 1024;
 int windowHeight = 768;
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
 // OpenGL camera view parameters
 static glm::vec3 eye_center;
 static glm::vec3 lookat(0, 0, 0);
@@ -35,15 +36,14 @@ static float viewPolar = 0.f;
 static float viewDistance = 300.0f;
 
 // For mouse
-double lastX = 512, lastY = 384;  // Starting mouse position (center of the screen)
-float yaw = 180.0f, pitch = 0.0f; // Initialize orientation angles
-bool firstMouse = true;           // To avoid sudden jumps at the start
+double lastX = 512, lastY = 384;  // Starting mouse position
+float yaw = 180.0f, pitch = 0.0f; // Initial orientation angle
 
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Lighting setup
-const glm::vec3 globalLightPosition(200.0f, 600.0f, 200.0f); // Position above the buildings
-glm::vec3 globalLightIntensity(1.0f, 1.0f, 1.0f);  // Bright white light
+const glm::vec3 globalLightPosition(200.0f, 600.0f, 200.0f);
+glm::vec3 globalLightIntensity(1.0f, 1.0f, 1.0f);  // White light
 glm::mat4 lightSpaceMatrix;
 
 // Shadow mapping
@@ -51,7 +51,6 @@ static glm::vec3 lightUp(0, 0, 1);
 static int shadowMapWidth = 0;
 static int shadowMapHeight = 0;
 
-static float depthFoV = 90;
 static float depthNear = 200.0f;
 static float depthFar = 800.0f;
 
@@ -65,8 +64,8 @@ GLuint normalBufferID;
 // Shader variable IDs
 GLuint depthMapShaders;     // s.vert, s.frag
 GLuint shadowRenderShaders; // s2.vert, s2.frag
-GLuint lightSpaceMatrixID;  // used to transform vertices into light space  // TODO: where is the light looking
-GLuint depthMapID;          // ^ those are stored in depthMapID shadow map  // TODO: /how are the values calculated/ -> auto calc
+GLuint lightSpaceMatrixID;  // used to transform vertices into light space
+GLuint depthMapID;          // ^ those are stored in depthMapID shadow map
 GLuint mvpMatrixID;         // transforms geometry for rendering
 GLuint lightPositionID;
 GLuint lightIntensityID;
@@ -97,26 +96,6 @@ static void saveDepthTexture(GLuint fbo, std::string filename) {
 	stbi_write_png(filename.c_str(), width, height, channels, img.data(), width * channels);
 }
 
-
-void printOpenGLState() {
-	GLint currentProgram;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
-	std::cout << "Current Shader Program: " << currentProgram << std::endl;
-
-	GLint activeTexture;
-	glGetIntegerv(GL_ACTIVE_TEXTURE, &activeTexture);
-	std::cout << "Active Texture Unit: " << activeTexture << std::endl;
-
-	GLint boundTexture;
-	glGetIntegerv(GL_TEXTURE_BINDING_2D, &boundTexture);
-	std::cout << "Bound 2D Texture: " << boundTexture << std::endl;
-
-	GLint boundVAO;
-	glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &boundVAO);
-	std::cout << "Bound VAO: " << boundVAO << std::endl;
-}
-
-
 void renderSceneFromLight(GLuint depthFBO, std::vector<Building> buildings) {
 	// Bind the FBO for rendering the depth map
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
@@ -124,20 +103,19 @@ void renderSceneFromLight(GLuint depthFBO, std::vector<Building> buildings) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	// Configure the light-space matrix
-	//glm::mat4 lightProjection = glm::.(glm::radians(depthFoV), (float)shadowMapWidth / (float)shadowMapHeight, depthNear, depthFar);
 	glm::mat4 lightProjection = glm::ortho(-500.0f, 500.0f, -500.0f, 500.0f, depthNear, depthFar);
 	glm::mat4 lightView = glm::lookAt(globalLightPosition, glm::vec3(10.0f, 0.0f, 10.0f), lightUp);
 	lightSpaceMatrix = lightProjection * lightView;
 
-	// Render the depth map
+	// Render depth map
 	for (Building &b : buildings) {
 		b.render_first_pass(lightSpaceMatrix, depthMapShaders, globalLightPosition, globalLightIntensity);
 	}
 
-	// Unbind the FBO
+	// Unbind FBO
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// Reset the viewport to the window size
+	// Reset viewport to the window size
 	glViewport(0, 0, windowWidth, windowHeight);
 }
 
@@ -187,31 +165,28 @@ int main(void) {
 	// Prepare shadow map size for shadow mapping. Usually this is the size of the window itself, but on some platforms like Mac this can be 2x the size of the window. Use glfwGetFramebufferSize to get the shadow map size properly.
 	glfwGetFramebufferSize(window, &shadowMapWidth, &shadowMapHeight);
 
+	// Load shaders
 	depthMapShaders = LoadShadersFromFile("../FinalProj/s.vert", "../FinalProj/s.frag");
-	if (depthMapShaders == 0)
-	{
+	if (depthMapShaders == 0) {
 		std::cerr << "Failed to load depthMap shaders." << std::endl;
 	}
-
 	shadowRenderShaders = LoadShadersFromFile("../FinalProj/s2.vert", "../FinalProj/s2.frag");
-
 	if (shadowRenderShaders == 0) {
 		std::cerr << "Failed to load shadowRender shaders." << std::endl;
 	}
 
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// Create the framebuffer object for depth
+	// Create the FBO
 	GLuint depthFBO;
 	glGenFramebuffers(1, &depthFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
 
-	// Create the depth texture
+	// Create depth texture
 	GLuint depthTexture;
 	glGenTextures(1, &depthTexture);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
 
-	// Define the texture properties and allocate memory
+	// Define texture properties and allocate memory
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	// Set texture parameters for depth texture
@@ -222,7 +197,7 @@ int main(void) {
 	GLfloat borderColor[] = {1.0, 1.0, 1.0, 1.0};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	// Attach the depth texture to the FBO’s depth attachment point
+	// Attach depth texture to FBO’s depth attachment point
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
 	// Ensure that we don't use any color buffer for this FBO
@@ -233,7 +208,9 @@ int main(void) {
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cerr << "Error: Framebuffer is not complete!" << std::endl;
 	}
-	// -----------------------------------------------------------------------------------------------------------------
+
+
+	// Create objects in the scene
 
 	// Create skybox
     Skybox skybox{};
@@ -243,16 +220,15 @@ int main(void) {
 	Road road;
 	road.initialize(glm::vec3(30.0f, 5.0f, 20.0f), glm::vec3(4, 0, 6), "../FinalProj/road/pavement.jpg");
 
-
 	// Create inner buildings and intersection
 	std::vector<Building> buildings;
 
-	int gridSizeX = 4;     // Number of buildings along x-axis
-	int gridSizeZ = 8;     // Number of buildings along z-axis
-	float spacing = 50.0f; // Spacing between buildings
+	int gridSizeX = 4;          // Number of buildings along x-axis
+	int gridSizeZ = 8;          // Number of buildings along z-axis
+	float spacing = 50.0f;      // Spacing between buildings
 	float outerSpacing = 60.0f; // Spacing between buildings
 
-	// Available textures
+	// Textures
 	const char* textures[] = {
 		"../FinalProj/building/modern0.jpg",
 		"../FinalProj/building/modern1.jpg",
@@ -279,17 +255,15 @@ int main(void) {
 			int textureIndex = rand() % 4;
 
 			Building b;
-			b.initialize(glm::vec3(posX, 0.0f, posZ), glm::vec3(width, height, depth), textures[textureIndex]); // Keep Y position at 0
-
+			b.initialize(glm::vec3(posX, 0.0f, posZ), glm::vec3(width, height, depth), textures[textureIndex]);
 			buildings.push_back(b);
 		}
 	}
 
 
-	// Outer square dimensions
+	// Outer square of buildings
 	int outerRingSize = 1; // Extra buildings in each direction beyond the grid
 
-	// Outer square of buildings
 	for (int i = -outerRingSize; i <= gridSizeX + outerRingSize; ++i) {
 		for (int j = -outerRingSize; j <= gridSizeZ + outerRingSize; ++j) {
 			// Skip positions within the original grid
@@ -297,7 +271,6 @@ int main(void) {
 				continue;
 			}
 
-			// Generate random dimensions for building
 			float width = 30 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (1)));
 			float height = 35 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (40 - 1)));
 			float depth = 30  + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (1)));
@@ -312,16 +285,16 @@ int main(void) {
 		}
 	}
 
-	// Create spire and blades
+	// Create spire (blades, windmill base and connector)
 	Windmill windmill;
 	windmill.initialize(glm::vec3(10.0f, 0.0f, 10.0f), glm::vec3(6.0f, 250.0f, 6.0f));
+
+	Blades blades;
+	blades.initialize(glm::vec3(10.0f, 500.0f, 20.0f), glm::vec3(80.0f, 80.0f, 80.0f));
 
 	Building b;
 	b.initialize(glm::vec3(10.0f, 495.0f, 10.0f), glm::vec3(6.0f, 6.0f, 20.0f), "../FinalProj/building/white.jpg");
 	buildings.push_back(b);
-
-	Blades blades;
-	blades.initialize(glm::vec3(10.0f, 500.0f, 20.0f), glm::vec3(80.0f, 80.0f, 80.0f));
 
 
 	// Create boulder
@@ -385,7 +358,7 @@ int main(void) {
 	glEnable(GL_DEPTH_TEST);
     do
     {
-    	// Render from the light's perspective
+    	// Render from the light's perspective to generate depth map
     	renderSceneFromLight(depthFBO, buildings);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -401,14 +374,6 @@ int main(void) {
     	// Create a combined VP matrix for the buildings
     	glm::mat4 vp = projectionMatrix * viewMatrix;
 
-    	glDepthMask(GL_FALSE); // Disable depth writes
-        // Render the skybox with this vp matrix
-        skybox.render(vph);
-    	glDepthMask(GL_TRUE);  // Re-enable depth writes
-
-    	// render road
-    	road.render(vp);
-
     	if (saveDepth) {
     		std::string filename = "depth_camera.png";
     		saveDepthTexture(depthFBO, filename);
@@ -416,9 +381,18 @@ int main(void) {
     		saveDepth = false;
     	}
 
-    	 glActiveTexture(GL_TEXTURE1); // Use texture unit 1 for depth map
-    	 glBindTexture(GL_TEXTURE_2D, depthTexture);
+    	glActiveTexture(GL_TEXTURE1); // Use texture unit 1 for depth map
+    	glBindTexture(GL_TEXTURE_2D, depthTexture);
 
+    	glDepthMask(GL_FALSE); // Disable depth writes
+        skybox.render(vph);        // Render skybox
+    	glDepthMask(GL_TRUE);  // Re-enable depth writes
+
+
+    	// Render road
+    	road.render(vp);
+
+    	// Render buildings
     	 for (Building& b : buildings) {
     	 	glUseProgram(shadowRenderShaders);
     	 	glUniform3fv(glGetUniformLocation(shadowRenderShaders, "lightPosition"), 1, &globalLightPosition[0]);
@@ -440,10 +414,10 @@ int main(void) {
     	tree3.render(vp, eye_center);
     	tree4.render(vp, eye_center);
 
-
     	// Render spire
     	windmill.render(vp);
     	blades.render(vp);
+
 
         // Swap buffers
         glfwSwapBuffers(window);
@@ -452,32 +426,25 @@ int main(void) {
     } // Check if the ESC key was pressed or the window was closed
     while (!glfwWindowShouldClose(window));
 
+
     // Clean up
     skybox.cleanup();
 	for(Building b : buildings) {
 		b.cleanup();
 	}
-
-
 	road.cleanup();
 	skybox.cleanup();
 	windmill.cleanup();
 	blades.cleanup();
-	tree.cleanup();
-	tree2.cleanup();
-	tree3.cleanup();
-	tree4.cleanup();
 
 
     // Close OpenGL window and terminate GLFW
     glfwTerminate();
-
     return 0;
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
-{
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode) {
 	// Speed of movement
 	float speed = 5.0f;
 
@@ -487,9 +454,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 	// Calculate the right vector (perpendicular to lookDirection and up)
 	glm::vec3 rightDirection = glm::normalize(glm::cross(lookDirection, up));
 
-
-    if (key == GLFW_KEY_R && action == GLFW_PRESS)
-    {
+    if (key == GLFW_KEY_R && action == GLFW_PRESS) {
         viewAzimuth = 0.5f;
         viewPolar = 0.5f;
         eye_center.y = viewDistance * cos(viewPolar);
@@ -499,26 +464,22 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         std::cout << "Reset." << std::endl;
     }
 
-    if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS))
-    {
+    if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
     	eye_center += lookDirection * speed;
     	lookat += lookDirection * speed; // Move look-at point to keep orientation
     }
 
-    if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS))
-    {
+    if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
     	eye_center -= lookDirection * speed;
     	lookat -= lookDirection * speed; // Move look-at point to keep orientation
     }
 
-    if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS))
-    {
+    if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
     	eye_center -= rightDirection * speed;
     	lookat -= rightDirection * speed; // Move look-at point to keep orientation
     }
 
-    if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS))
-    {
+    if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
     	eye_center += rightDirection * speed;
     	lookat += rightDirection * speed; // Move look-at point to keep orientation
     }
@@ -527,16 +488,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	// Initialize the starting position of the mouse
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	// Calculate the mouse offset since the last frame
 	float xOffset = xpos - lastX;
 	float yOffset = lastY - ypos; // Reversed because y-coordinates go from bottom to top

@@ -14,7 +14,7 @@ struct Building {
     glm::vec3 position;
     glm::vec3 scale;
 
-    GLfloat vertex_buffer_data[72] = {	// Vertex definition for a canonical box
+    GLfloat vertex_buffer_data[72] = {
 		// Front face
 		-1.0f,  0.0f,  1.0f,
 		 1.0f,  0.0f,  1.0f,
@@ -90,7 +90,7 @@ struct Building {
 		1.0f, 0.0f, 1.0f,
 	};
 
-	GLuint index_buffer_data[36] = {	// 12 triangle faces of a box
+	GLuint index_buffer_data[36] = {
 		0, 1, 2,
 		0, 2, 3,
 

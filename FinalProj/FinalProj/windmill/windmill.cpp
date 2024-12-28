@@ -5,7 +5,6 @@
 #include <render/shader.h>
 
 
-// Generate the geometry (vertices, colors, and indices) for the cylinder
 void Windmill::generateGeometry(int slices, float height, float radius) {
     vertex_buffer_data.clear();
     index_buffer_data.clear();
@@ -29,7 +28,7 @@ void Windmill::generateGeometry(int slices, float height, float radius) {
         vertex_buffer_data.push_back(height);
         vertex_buffer_data.push_back(z);
 
-        // Colors (set to white for simplicity)
+        // Color
         for (int j = 0; j < 2; ++j) {
             color_buffer_data.push_back(0.8f);
             color_buffer_data.push_back(0.8f);

@@ -1,16 +1,13 @@
 #version 330 core
 
-// Input
 layout(location = 0) in vec3 inPosition;
 layout(location = 1) in vec3 inColor;
 layout(location = 2) in vec2 inUV;
 
-// Output
+uniform mat4 MVP;
+
 out vec3 color;
 out vec2 uv;
-
-
-uniform mat4 MVP;
 
 void main() {
     uv = inUV;

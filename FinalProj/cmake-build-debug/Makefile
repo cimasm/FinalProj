@@ -116,19 +116,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named lab2_building
-
-# Build rule for target.
-lab2_building: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 lab2_building
-.PHONY : lab2_building
-
-# fast build rule for target.
-lab2_building/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/build
-.PHONY : lab2_building/fast
-
-#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -172,7 +159,6 @@ FinalProj/building/building.obj: FinalProj/building/building.cpp.obj
 
 # target to build an object file
 FinalProj/building/building.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/building/building.cpp.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/building/building.cpp.obj
 .PHONY : FinalProj/building/building.cpp.obj
 
@@ -181,7 +167,6 @@ FinalProj/building/building.i: FinalProj/building/building.cpp.i
 
 # target to preprocess a source file
 FinalProj/building/building.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/building/building.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/building/building.cpp.i
 .PHONY : FinalProj/building/building.cpp.i
 
@@ -190,7 +175,6 @@ FinalProj/building/building.s: FinalProj/building/building.cpp.s
 
 # target to generate assembly for a file
 FinalProj/building/building.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/building/building.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/building/building.cpp.s
 .PHONY : FinalProj/building/building.cpp.s
 
@@ -247,7 +231,6 @@ FinalProj/render/shader.obj: FinalProj/render/shader.cpp.obj
 
 # target to build an object file
 FinalProj/render/shader.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/render/shader.cpp.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/render/shader.cpp.obj
 .PHONY : FinalProj/render/shader.cpp.obj
 
@@ -256,7 +239,6 @@ FinalProj/render/shader.i: FinalProj/render/shader.cpp.i
 
 # target to preprocess a source file
 FinalProj/render/shader.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/render/shader.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/render/shader.cpp.i
 .PHONY : FinalProj/render/shader.cpp.i
 
@@ -265,7 +247,6 @@ FinalProj/render/shader.s: FinalProj/render/shader.cpp.s
 
 # target to generate assembly for a file
 FinalProj/render/shader.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/render/shader.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/render/shader.cpp.s
 .PHONY : FinalProj/render/shader.cpp.s
 
@@ -274,7 +255,6 @@ FinalProj/road/road.obj: FinalProj/road/road.cpp.obj
 
 # target to build an object file
 FinalProj/road/road.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/road/road.cpp.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/road/road.cpp.obj
 .PHONY : FinalProj/road/road.cpp.obj
 
@@ -283,7 +263,6 @@ FinalProj/road/road.i: FinalProj/road/road.cpp.i
 
 # target to preprocess a source file
 FinalProj/road/road.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/road/road.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/road/road.cpp.i
 .PHONY : FinalProj/road/road.cpp.i
 
@@ -292,7 +271,6 @@ FinalProj/road/road.s: FinalProj/road/road.cpp.s
 
 # target to generate assembly for a file
 FinalProj/road/road.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/road/road.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/road/road.cpp.s
 .PHONY : FinalProj/road/road.cpp.s
 
@@ -325,7 +303,6 @@ FinalProj/windmill/blades.obj: FinalProj/windmill/blades.cpp.obj
 
 # target to build an object file
 FinalProj/windmill/blades.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/windmill/blades.cpp.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/windmill/blades.cpp.obj
 .PHONY : FinalProj/windmill/blades.cpp.obj
 
@@ -334,7 +311,6 @@ FinalProj/windmill/blades.i: FinalProj/windmill/blades.cpp.i
 
 # target to preprocess a source file
 FinalProj/windmill/blades.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/windmill/blades.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/windmill/blades.cpp.i
 .PHONY : FinalProj/windmill/blades.cpp.i
 
@@ -343,7 +319,6 @@ FinalProj/windmill/blades.s: FinalProj/windmill/blades.cpp.s
 
 # target to generate assembly for a file
 FinalProj/windmill/blades.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/windmill/blades.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/windmill/blades.cpp.s
 .PHONY : FinalProj/windmill/blades.cpp.s
 
@@ -352,7 +327,6 @@ FinalProj/windmill/windmill.obj: FinalProj/windmill/windmill.cpp.obj
 
 # target to build an object file
 FinalProj/windmill/windmill.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/windmill/windmill.cpp.obj
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/windmill/windmill.cpp.obj
 .PHONY : FinalProj/windmill/windmill.cpp.obj
 
@@ -361,7 +335,6 @@ FinalProj/windmill/windmill.i: FinalProj/windmill/windmill.cpp.i
 
 # target to preprocess a source file
 FinalProj/windmill/windmill.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/windmill/windmill.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/windmill/windmill.cpp.i
 .PHONY : FinalProj/windmill/windmill.cpp.i
 
@@ -370,7 +343,6 @@ FinalProj/windmill/windmill.s: FinalProj/windmill/windmill.cpp.s
 
 # target to generate assembly for a file
 FinalProj/windmill/windmill.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab2_building.dir\build.make CMakeFiles/lab2_building.dir/FinalProj/windmill/windmill.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/FinalProj/windmill/windmill.cpp.s
 .PHONY : FinalProj/windmill/windmill.cpp.s
 
@@ -384,7 +356,6 @@ help:
 	@echo ... rebuild_cache
 	@echo ... glad
 	@echo ... glfw
-	@echo ... lab2_building
 	@echo ... main
 	@echo ... FinalProj/building/building.obj
 	@echo ... FinalProj/building/building.i

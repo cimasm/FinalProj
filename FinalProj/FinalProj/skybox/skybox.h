@@ -8,7 +8,7 @@ struct Skybox {
     GLuint mvpMatrixSkyboxID, textureSamplerSkyboxID, programSkyboxID;
 
 
-    GLfloat vertex_buffer_data[72] = {	// Vertex definition for a canonical box
+    GLfloat vertex_buffer_data[72] = {
         // Front face
         -1.0f, -1.0f, 1.0f,
         1.0f, -1.0f, 1.0f,

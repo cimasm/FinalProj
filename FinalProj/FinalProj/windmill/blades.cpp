@@ -67,8 +67,8 @@ void Blades::initialize(glm::vec3 position, glm::vec3 scale) {
 }
 
 void Blades::render(glm::mat4 cameraMatrix) {
-    static float rotationAngle = 0.0f; // Persistent angle of rotation
-    rotationAngle += 0.2f;            // Increment the angle to make it spin (adjust speed here)
+    static float rotationAngle = 0.0f;
+    rotationAngle += 0.2f;
 
     glUseProgram(programID);
     glBindVertexArray(vertexArrayID);
@@ -81,7 +81,7 @@ void Blades::render(glm::mat4 cameraMatrix) {
     glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-    // Apply transformations: translate to position, rotate, then scale
+    // Apply transformations
     glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position);
     modelMatrix = glm::rotate(modelMatrix, glm::radians(rotationAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Z-axis rotation
     modelMatrix = glm::scale(modelMatrix, scale);

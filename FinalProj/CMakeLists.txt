@@ -17,22 +17,6 @@ include_directories(
 		external/
 		FinalProj/
 )
-
-# Target for lab2_building
-add_executable(lab2_building
-		FinalProj/building/building.cpp
-		FinalProj/render/shader.cpp
-		FinalProj/road/road.cpp
-		FinalProj/windmill/windmill.cpp
-		FinalProj/windmill/blades.cpp
-)
-
-target_link_libraries(lab2_building
-		${OPENGL_LIBRARY}
-		glfw
-		glad
-)
-
 # Target for main
 add_executable(main
 		FinalProj/main.cpp

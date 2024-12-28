@@ -22,14 +22,14 @@ float ShadowCalculation(vec4 fragPosLightSpace) {
 
     // Check if projCoords are within the depth texture bounds
     if (fragPosition.y > lightPosition.y)
-        return 1.0; // No shadow if outside light's view frustum     // this is why everything above lights y pos is bright
+        return 1.0;
 
     // Get closest depth from light's perspective
     float closestDepth = texture(depthMap, projCoords.xy).r;
     float currentDepth = projCoords.z;
 
     // Shadow calculation with small bias to prevent acne
-    float bias = 0.67; // 1e-3;
+    float bias = 0.67;
     return (currentDepth > closestDepth + bias) ? 0.2 : 1.0;
 }
 
@@ -60,5 +60,5 @@ void main() {
 
     // Combine results
     vec3 result = (ambient + diffuse + specular) * texture(textureSampler, UV).rgb;
-    color = result; // * shadow;
+    color = result;  // * shadow
 }

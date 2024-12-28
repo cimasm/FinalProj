@@ -1,4 +1,3 @@
-C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/cmake-build-debug/CMakeFiles/lab2_building.dir
 C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/cmake-build-debug/CMakeFiles/main.dir
 C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/miaci/COLLEGE/YEAR_4/Computer_Graphics/FinalProject/FinalProj/cmake-build-debug/CMakeFiles/rebuild_cache.dir

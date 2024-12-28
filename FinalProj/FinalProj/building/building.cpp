@@ -30,7 +30,6 @@ static GLuint LoadTextureTileBox(const char *texture_file_path) {
 }
 
 void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *texture_file_path) {
-
 	// Set the color values to 1
 	for (int i = 0; i < 72; ++i) color_buffer_data[i] = 1.0f;
 
@@ -52,7 +51,7 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data, GL_STATIC_DRAW);
 
-	// scale up the UV coordinates to a range greater than 1
+	// Scale up the UV coordinates to a range greater than 1
 	for (int i = 0; i < 24; ++i) uv_buffer_data[2*i+1] *= 5;
 
 	// Create a vertex buffer object to store the UV data
@@ -64,7 +63,6 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	glGenBuffers(1, &normalBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normal_buffer_data), normal_buffer_data, GL_STATIC_DRAW);
-
 
 	// Create an index buffer object to store the index data that defines triangle faces
 	glGenBuffers(1, &indexBufferID);
@@ -81,7 +79,7 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, const char *textu
 	// Get a handle for our "MVP" uniform
 	mvpMatrixID = glGetUniformLocation(programID, "MVP");
 
-    // Load a texture
+    // Load texture
 	textureID = LoadTextureTileBox(texture_file_path);
 
     // Get a handle to texture sampler
@@ -121,10 +119,10 @@ void Building::render_first_pass(glm::mat4 lightSpaceMatrix, GLuint depthMapShad
 
 	// Draw the box
 	glDrawElements(
-		GL_TRIANGLES,      // mode
+		GL_TRIANGLES,								 // mode
 		sizeof(index_buffer_data) / sizeof(GLuint),  // number of indices
-		GL_UNSIGNED_INT,   // type
-		(void*)0           // element array buffer offset
+		GL_UNSIGNED_INT,							 // type
+		(void*)0									 // element array buffer offset
 	);
 
 	glDisableVertexAttribArray(0);
@@ -146,7 +144,7 @@ void Building::render_second_pass(glm::mat4 cameraMatrix, GLuint shadowRenderSha
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	// Normals
-	glEnableVertexAttribArray(3); // Attribute location 3 for normals
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -160,9 +158,7 @@ void Building::render_second_pass(glm::mat4 cameraMatrix, GLuint shadowRenderSha
 	GLuint modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
 	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 
-	///////
 	glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
-
 
 	// Set model-view-projection matrix
 	glm::mat4 mvp = cameraMatrix * modelMatrix;
@@ -171,12 +167,6 @@ void Building::render_second_pass(glm::mat4 cameraMatrix, GLuint shadowRenderSha
 	// Set the normal matrix
 	GLuint normalMatrixID = glGetUniformLocation(programID, "normalMatrix");
 	glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, &normalMatrix[0][0]);
-
-	//////
-
-	// // Set model-view-projection matrix
-	// glm::mat4 mvp = cameraMatrix * modelMatrix;
-	// glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
 
 	// Enable UV buffer and texture sampler
 	glEnableVertexAttribArray(2);
