@@ -346,6 +346,36 @@ int main(void) {
 	tree4.setScale(glm::vec3(1000.0f));
 
 
+	// Create cars
+	Model car1;
+	if (!car1.loadModel("../FinalProj/model/scene2.gltf")) {
+		std::cerr << "Failed to load model!" << std::endl;
+		return -1;
+	}
+	car1.setPosition(glm::vec3(-300, 200.0f, -600));
+	car1.setScale(glm::vec3(20.0f));
+
+	Building car1_b;
+	car1_b.initialize(glm::vec3(-300.0f, 200.0f, -500.0f), glm::vec3(4.0f, 2.0f, 20.0f), "../FinalProj/building/white.jpg");
+
+	Model car2;
+	if (!car2.loadModel("../FinalProj/model/scene2.gltf")) {
+		std::cerr << "Failed to load model!" << std::endl;
+		return -1;
+	}
+	car2.setPosition(glm::vec3(600, 200.0f, -70.0f));
+	car2.setRotation(270, glm::vec3(0.0f, 1.0f, 0.0f));
+	car2.setScale(glm::vec3(20.0f));
+
+	Model car3;
+	if (!car3.loadModel("../FinalProj/model/scene2.gltf")) {
+		std::cerr << "Failed to load model!" << std::endl;
+		return -1;
+	}
+	car3.setPosition(glm::vec3(-285, -32.0f, 285.0f));
+	car3.setScale(glm::vec3(20.0f));
+
+
 	// Camera setup
 	eye_center = glm::vec3(400.0f, 400.0f, 600.0f);
 
@@ -425,6 +455,13 @@ int main(void) {
     	tree2.render(vp, eye_center);
     	tree3.render(vp, eye_center);
     	tree4.render(vp, eye_center);
+
+    	// Render cars
+    	car1.render(vp, eye_center);
+    	car1.translate(glm::vec3(0.0f,0.0f, 0.05f));
+    	car2.render(vp, eye_center);
+    	car2.translate(glm::vec3(0.0f,0.0f, 0.02f));
+    	car3.render(vp, eye_center);
 
     	// Render spire
     	windmill.render(vp);

@@ -23,7 +23,6 @@ private:
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
     glm::mat4 modelMatrix;
-
     tinygltf::Model model;
     tinygltf::TinyGLTF loader;
     bool loadTexture(const tinygltf::Model& model, int textureIndex);
