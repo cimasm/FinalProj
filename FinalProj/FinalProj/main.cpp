@@ -6,6 +6,7 @@
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <iomanip>
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 #include <iostream>
@@ -17,6 +18,7 @@
 #include <windmill/windmill.h>
 #include <model/model.h>
 #define _USE_MATH_DEFINES
+
 
 
 static GLFWwindow *window;
@@ -322,7 +324,7 @@ int main(void) {
 		std::cerr << "Failed to load model!" << std::endl;
 		return -1;
 	}
-	tree2.setPosition(glm::vec3(-90, -10.0f, 420));
+	tree2.setPosition(glm::vec3(-120, -10.0f, 420));
 	tree2.setRotation(180, glm::vec3(0.0f, 1.0f, 0.0f));
 	tree2.setScale(glm::vec3(800.0f));
 
@@ -344,7 +346,6 @@ int main(void) {
 	tree4.setScale(glm::vec3(1000.0f));
 
 
-
 	// Camera setup
 	eye_center = glm::vec3(400.0f, 400.0f, 600.0f);
 
@@ -354,6 +355,11 @@ int main(void) {
     glm::float32 zFar = 1200.0f;
     projectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, zNear, zFar);
 
+	// Time and frame rate tracking
+	static double lastTime = glfwGetTime();
+	float time = 0.0f;	// Animation time
+	float fTime = 0.0f; // Time for measuring fps
+	unsigned long frames = 0;
 
 	glEnable(GL_DEPTH_TEST);
     do
@@ -362,6 +368,12 @@ int main(void) {
     	renderSceneFromLight(depthFBO, buildings);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    	// Update time
+    	double currentTime = glfwGetTime();
+    	float deltaTime = float(currentTime - lastTime);
+    	lastTime = currentTime;
+
 
         viewMatrix = glm::lookAt(eye_center, lookat, up);
 
@@ -417,6 +429,21 @@ int main(void) {
     	// Render spire
     	windmill.render(vp);
     	blades.render(vp);
+
+
+    	// FPS tracking
+    	// Count number of frames over a few seconds and take average
+    	frames++;
+    	fTime += deltaTime;
+    	if (fTime > 2.0f) {
+    		float fps = frames / fTime;
+    		frames = 0;
+    		fTime = 0;
+
+    		std::stringstream stream;
+    		stream << std::fixed << std::setprecision(2) << "Final Project | (FPS): " << fps;
+    		glfwSetWindowTitle(window, stream.str().c_str());
+    	}
 
 
         // Swap buffers
