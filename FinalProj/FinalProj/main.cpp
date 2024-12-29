@@ -38,9 +38,12 @@ static float viewPolar = 0.f;
 static float viewDistance = 300.0f;
 
 // For mouse
-double lastX = 512, lastY = 384;  // Starting mouse position
+double lastX = 512, lastY = 384;  // Starting mouse positionq1
 float yaw = 180.0f, pitch = 0.0f; // Initial orientation angle
 
+// Rotate cars
+bool rotateCars = false;
+bool moveParkedCar = false;
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Lighting setup
@@ -352,18 +355,15 @@ int main(void) {
 		std::cerr << "Failed to load model!" << std::endl;
 		return -1;
 	}
-	car1.setPosition(glm::vec3(-300, 200.0f, -600));
+	car1.setPosition(glm::vec3(-400, 200.0f, -800));
 	car1.setScale(glm::vec3(20.0f));
-
-	Building car1_b;
-	car1_b.initialize(glm::vec3(-300.0f, 200.0f, -500.0f), glm::vec3(4.0f, 2.0f, 20.0f), "../FinalProj/building/white.jpg");
 
 	Model car2;
 	if (!car2.loadModel("../FinalProj/model/scene2.gltf")) {
 		std::cerr << "Failed to load model!" << std::endl;
 		return -1;
 	}
-	car2.setPosition(glm::vec3(600, 200.0f, -70.0f));
+	car2.setPosition(glm::vec3(800, 200.0f, -100.0f));
 	car2.setRotation(270, glm::vec3(0.0f, 1.0f, 0.0f));
 	car2.setScale(glm::vec3(20.0f));
 
@@ -387,7 +387,6 @@ int main(void) {
 
 	// Time and frame rate tracking
 	static double lastTime = glfwGetTime();
-	float time = 0.0f;	// Animation time
 	float fTime = 0.0f; // Time for measuring fps
 	unsigned long frames = 0;
 
@@ -463,6 +462,17 @@ int main(void) {
     	car2.translate(glm::vec3(0.0f,0.0f, 0.02f));
     	car3.render(vp, eye_center);
 
+    	if (rotateCars) {
+    		car1.setRotation(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    		car2.setRotation(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    		rotateCars = false;
+    	}
+
+    	if (moveParkedCar) {
+    		car3.translate(glm::vec3(0.0f,0.0f, 0.03f));
+    	}
+
+
     	// Render spire
     	windmill.render(vp);
     	blades.render(vp);
@@ -518,16 +528,6 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 	// Calculate the right vector (perpendicular to lookDirection and up)
 	glm::vec3 rightDirection = glm::normalize(glm::cross(lookDirection, up));
 
-    if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-        viewAzimuth = 0.5f;
-        viewPolar = 0.5f;
-        eye_center.y = viewDistance * cos(viewPolar);
-        eye_center.x = viewDistance * cos(viewAzimuth);
-        eye_center.z = viewDistance * sin(viewAzimuth);
-    	lookat = glm::vec3(0, 0, 0);
-        std::cout << "Reset." << std::endl;
-    }
-
     if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
     	eye_center += lookDirection * speed;
     	lookat += lookDirection * speed; // Move look-at point to keep orientation
@@ -550,6 +550,12 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+
+	if (key == GLFW_KEY_R && action == GLFW_PRESS)
+		rotateCars = true;
+
+	if (key == GLFW_KEY_M && action == GLFW_PRESS)
+		moveParkedCar = true;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
